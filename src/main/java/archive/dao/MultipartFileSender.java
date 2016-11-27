@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Created by kevin on 10/02/15.
+ */
 public class MultipartFileSender {
 
   private static final int DEFAULT_BUFFER_SIZE = 20480; // ..bytes = 20KB.

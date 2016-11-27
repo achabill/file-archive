@@ -2,6 +2,7 @@ package archive.dao;
 
 import archive.model.Document;
 import archive.model.DocumentMetadata;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -25,11 +26,11 @@ import java.util.*;
  * @author Acha Bill <achabill12[at]gmail[dot]com>
  */
 @Service("documentDao")
-class FileSystemDocumentDao implements IDocumentDao {
+public class FileSystemDocumentDao implements IDocumentDao {
 
-  //private static final Logger LOG = Logger.getLogger(FileSystemDocumentDao.class);
+  private static final Logger LOG = Logger.getLogger(FileSystemDocumentDao.class);
 
-  public static String DIRECTORY = "archive";
+  public static String DIRECTORY = "file-archive";
   public static final String META_DATA_FILE_NAME = "metadata.properties";
 
   @PostConstruct
@@ -50,7 +51,7 @@ class FileSystemDocumentDao implements IDocumentDao {
       saveMetaData(document);
     } catch (IOException e) {
       String message = "Error while inserting document";
-      //LOG.error(message, e);
+      LOG.error(message, e);
       throw new RuntimeException(message, e);
     }
   }
@@ -68,7 +69,7 @@ class FileSystemDocumentDao implements IDocumentDao {
       return findInFileSystem(personName, date);
     } catch (IOException e) {
       String message = "Error while finding document, person name: " + personName + ", date:" + date;
-      //LOG.error(message, e);
+      LOG.error(message, e);
       throw new RuntimeException(message, e);
     }
   }
@@ -84,7 +85,7 @@ class FileSystemDocumentDao implements IDocumentDao {
       return loadFromFileSystem(uuid);
     } catch (IOException e) {
       String message = "Error while loading document with id: " + uuid;
-      //LOG.error(message, e);
+      LOG.error(message, e);
       throw new RuntimeException(message, e);
     }
 
@@ -104,7 +105,7 @@ class FileSystemDocumentDao implements IDocumentDao {
       return loadFromFileSystemWithPath(uuid);
     } catch (IOException e) {
       String message = "Error while loading document with id: " + uuid;
-      //LOG.error(message, e);
+      LOG.error(message, e);
       throw new RuntimeException(message, e);
     }
   }

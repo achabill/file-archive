@@ -19,8 +19,8 @@ import java.util.List;
  *
  * @author Acha Bill <achabill12[at]gmail[dot]com>
  */
-@Service
-class ArchiveService implements IArchiveService, Serializable {
+@Service("archiveService")
+public class ArchiveService implements IArchiveService, Serializable {
 
   private static final long serialVersionUID = 8119784722798361327L;
 
@@ -59,16 +59,16 @@ class ArchiveService implements IArchiveService, Serializable {
 
   /**
    * Returns the document from the archive with the given id in multipart download
-   *
-   * @param id       The id of a document
+   *  @param id       The id of a document
    * @param request
    * @param response
    */
   @Override
-  public void getDocumentMultipart(String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+  public Object getDocumentMultipart(String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
     Document document = getDocumentDao().loadWithPath(id);
     if(document != null)
       MultipartFileSender.fromPath(document.getPath()).with(request).with(response).serveResource();
+    return null;
   }
 
 

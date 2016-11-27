@@ -51,6 +51,8 @@ public interface IArchiveService {
    * Returns the document from the archive with the given id in multipart download
    * @param id The id of a document
    */
-  void getDocumentMultipart(String id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+  Object getDocumentMultipart(String id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+
 }
 
