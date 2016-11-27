@@ -8,12 +8,14 @@ Acha Bill [achabill12@gmail.com]
 - Download file (full or multipart)
 
 ## Usage
-Add dependency in maven
-    <dependency>
-        <groupId>org.skylabase</groupId>
-        <artifactId>file-archive</artifactId>
-        <version>1.0</version>
-    </dependency
+Add dependency in maven  
+    
+    <dependency>  
+         <groupId>org.skylabase</groupId>
+         <artifactId>file-archive</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
 
 ## Contributing
 Send your PRs
