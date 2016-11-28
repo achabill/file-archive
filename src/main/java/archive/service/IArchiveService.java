@@ -6,6 +6,7 @@ import archive.model.DocumentMetadata;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +54,11 @@ public interface IArchiveService {
    */
   Object getDocumentMultipart(String id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
-
+  /**
+   * Delests the document with the id
+   * @param id The id
+   * @return The uuid of the deleted document
+   */
+  String deleteDocument(String id) throws IOException;
 }
 

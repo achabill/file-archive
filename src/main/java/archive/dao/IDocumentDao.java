@@ -4,6 +4,7 @@ package archive.dao;
 import archive.model.Document;
 import archive.model.DocumentMetadata;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -64,5 +65,12 @@ public interface IDocumentDao {
    * @return The filename
    */
   String getArchiveDirectory();
+
+  /**
+   * Deletes the document with the specified uuid
+   * @param uuid The uuid of the document
+   * @return The deleted uuid
+   */
+  String delete(String uuid) throws IOException;
 }
 

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -122,6 +123,23 @@ public class ArchiveController {
       getArchiveService().getDocumentMultipart(id,request,response);
       return new ResponseEntity<String>("multipart", HttpStatus.OK);
     }
+  }
+
+  /**
+   * Deletes the document from the archive with the given UUID.
+   * <p>
+   *     Url: /archive/document/{id} [DELETE]
+   * </p>
+   *
+   * @param id The UUID of a document
+   * @return The UUID of the deleted file.
+   * @throws IOException Exception
+   */
+  @RequestMapping(value = "/document/{id}", method = RequestMethod.DELETE)
+  @ApiOperation(value = "Delete document", notes = "Deletes the document with the specified UUID")
+  public HttpEntity<String> deleteDocument(@PathVariable String id) throws IOException {
+    getArchiveService().deleteDocument(id);
+    return new ResponseEntity<String>(id,HttpStatus.ACCEPTED);
   }
 
   public IArchiveService getArchiveService() {

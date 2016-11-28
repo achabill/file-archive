@@ -4,9 +4,11 @@ import archive.model.Document;
 import archive.model.DocumentMetadata;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -128,6 +130,19 @@ public class FileSystemDocumentDao implements IDocumentDao {
   @Override
   public String getArchiveDirectory() {
     return DIRECTORY;
+  }
+
+  /**
+   * Deletes the document with the specified uuid
+   *
+   * @param uuid The uuid of the document
+   * @return The deleted uuid
+   */
+  @Override
+  public String delete(String uuid) throws IOException {
+      if(FileSystemUtils.deleteRecursively(new File(getDirectoryPath(uuid))))
+        return uuid;
+    return null;
   }
 
 

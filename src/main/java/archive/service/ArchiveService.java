@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -69,6 +70,17 @@ public class ArchiveService implements IArchiveService, Serializable {
     if(document != null)
       MultipartFileSender.fromPath(document.getPath()).with(request).with(response).serveResource();
     return null;
+  }
+
+  /**
+   * Delests the document with the id
+   *
+   * @param id The id
+   * @return The uuid of the deleted document
+   */
+  @Override
+  public String deleteDocument(String id) throws IOException {
+    return getDocumentDao().delete(id);
   }
 
 
