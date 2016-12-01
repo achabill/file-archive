@@ -22,17 +22,7 @@ public interface IDocumentDao {
    */
   void insert(Document document);
 
-  /**
-   * Finds documents in the data store matching the given parameter.
-   * A list of document meta data is returned which does not include the file data.
-   * Use load and the id from the meta data to get the document file.
-   * Returns an empty list if no document was found.
-   *
-   * @param personName The name of a person, may be null
-   * @param date       The date of a document, may be null
-   * @return A list of document meta data
-   */
-  List<DocumentMetadata> findByPersonNameDate(String personName, Date date);
+
 
   /**
    * Returns the document from the data store with the given id.
@@ -72,5 +62,18 @@ public interface IDocumentDao {
    * @return The deleted uuid
    */
   String delete(String uuid) throws IOException;
+
+  /**
+   * Finds documents in the data store matching the given parameter.
+   * A list of document meta data is returned which does not include the file data.
+   * Use load and the id from the meta data to get the document file.
+   * Returns an empty list if no document was found.
+   *
+   * @param personName The name of a person, may be null
+   * @param date       The date of a document, may be null
+   * @param  contentType     Contenttype
+   * @return A list of document meta data
+   */
+  List<DocumentMetadata> findByPersonNameDateContentType(String personName, Date date, String contentType);
 }
 

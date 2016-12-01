@@ -69,14 +69,18 @@ public class ArchiveController {
     @RequestParam(value = "date", required = true) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
 
     try {
-      Document document = new Document(file.getBytes(), file.getOriginalFilename(), date, person);
+      String contentType = file.getContentType();
+      if(contentType == null)
+        throw new RuntimeException("Invalid content type");
+
+      Document document = new Document(file.getBytes(), file.getOriginalFilename(), date, person,contentType);
       getArchiveService().save(document);
       return document.getMetadata();
     } catch (RuntimeException e) {
-      LOG.error("Error while uploading.", e);
+      LOG.error("Error while uploading. " + e.getMessage(), e);
       throw e;
     } catch (Exception e) {
-      LOG.error("Error while uploading.", e);
+      LOG.error("Error while uploading. " + e.getMessage(), e);
       throw new RuntimeException(e);
     }
   }
@@ -89,18 +93,21 @@ public class ArchiveController {
    * Url: /archive/documents?person={person}&date={date} [GET]
    *
    * @param person The name of the uploading person
+   * @param contentType Search by conent type
    * @param date   The date of the document
    * @return A list of document meta data
    */
   @RequestMapping(value = "/documents", method = RequestMethod.GET)
-  @ApiOperation(value = "Find documents in archive", notes = " Returns a list of document meta data\n" +
-    "   * which does not include the file data. Use getDocument to get the file.\n" +
+  @ApiOperation(value = "Find documents in archive", notes = " Returns a list of document meta data.\n" +
+    "   * Does not include the file data. Use getDocument to get the file.\n" +
     "   * Returns an empty list if no document was found.")
   public HttpEntity<List<DocumentMetadata>> findDocument(
+    @RequestParam(value = "contenttype", required = false) String contentType,
     @RequestParam(value = "person", required = false) String person,
     @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
     HttpHeaders httpHeaders = new HttpHeaders();
-    return new ResponseEntity<List<DocumentMetadata>>(getArchiveService().findDocuments(person, date), httpHeaders, HttpStatus.OK);
+
+    return new ResponseEntity<List<DocumentMetadata>>(getArchiveService().findDocuments(person, date,contentType), httpHeaders, HttpStatus.OK);
   }
 
   /**

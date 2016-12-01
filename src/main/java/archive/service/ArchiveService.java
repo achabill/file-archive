@@ -41,8 +41,8 @@ public class ArchiveService implements IArchiveService, Serializable {
    * Finds document in the archive
    */
   @Override
-  public List<DocumentMetadata> findDocuments(String personName, Date date) {
-    return getDocumentDao().findByPersonNameDate(personName, date);
+  public List<DocumentMetadata> findDocuments(String personName, Date date, String contentType) {
+    return getDocumentDao().findByPersonNameDateContentType(personName, date, contentType);
   }
 
   /**

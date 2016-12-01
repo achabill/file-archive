@@ -58,23 +58,6 @@ public class FileSystemDocumentDao implements IDocumentDao {
     }
   }
 
-  /**
-   * Finds documents in the data store matching the given parameter.
-   * To find a document all document meta data sets are iterated to check if they match
-   * the parameter.
-   *
-   * @see IDocumentDao#findByPersonNameDate(java.lang.String, java.util.Date)
-   */
-  @Override
-  public List<DocumentMetadata> findByPersonNameDate(String personName, Date date) {
-    try {
-      return findInFileSystem(personName, date);
-    } catch (IOException e) {
-      String message = "Error while finding document, person name: " + personName + ", date:" + date;
-      LOG.error(message, e);
-      throw new RuntimeException(message, e);
-    }
-  }
 
   /**
    * Returns the document from the data store with the given UUID.
@@ -140,25 +123,52 @@ public class FileSystemDocumentDao implements IDocumentDao {
    */
   @Override
   public String delete(String uuid) throws IOException {
-      if(FileSystemUtils.deleteRecursively(new File(getDirectoryPath(uuid))))
-        return uuid;
-    return null;
+
+    File f = new File(getDirectoryPath(uuid));
+    if(!f.exists()) {
+      throw new FileNotFoundException("File not found");
+    }else {
+      if (FileSystemUtils.deleteRecursively(f)) ;
+      return uuid;
+    }
+  }
+
+  /**
+   * Finds documents in the data store matching the given parameter.
+   * A list of document meta data is returned which does not include the file data.
+   * Use load and the id from the meta data to get the document file.
+   * Returns an empty list if no document was found.
+   *
+   * @param personName  The name of a person, may be null
+   * @param date        The date of a document, may be null
+   * @param contentType Contenttype
+   * @return A list of document meta data
+   */
+  @Override
+  public List<DocumentMetadata> findByPersonNameDateContentType(String personName, Date date, String contentType) {
+    try {
+      return findInFileSystem(personName, date,contentType);
+    } catch (IOException e) {
+      String message = "Error while finding document, person name: " + personName + ", date:" + date;
+      LOG.error(message, e);
+      throw new RuntimeException(message, e);
+    }
   }
 
 
-  private List<DocumentMetadata> findInFileSystem(String personName, Date date) throws IOException {
+  private List<DocumentMetadata> findInFileSystem(String personName, Date date, String contentType) throws IOException {
     List<String> uuidList = getUuidList();
     List<DocumentMetadata> metadataList = new ArrayList<DocumentMetadata>(uuidList.size());
     for (String uuid : uuidList) {
       DocumentMetadata metadata = loadMetadataFromFileSystem(uuid);
-      if (isMatched(metadata, personName, date)) {
+      if (isMatched(metadata, personName, date,contentType)) {
         metadataList.add(metadata);
       }
     }
     return metadataList;
   }
 
-  private boolean isMatched(DocumentMetadata metadata, String personName, Date date) {
+  private boolean isMatched(DocumentMetadata metadata, String personName, Date date, String contentType) {
     if (metadata == null) {
       return false;
     }
@@ -168,6 +178,9 @@ public class FileSystemDocumentDao implements IDocumentDao {
     }
     if (match && date != null) {
       match = (date.equals(metadata.getDocumentDate()));
+    }
+    if(match && contentType != null){
+      match = metadata.getContentType().contains(contentType.toLowerCase());
     }
     return match;
   }
@@ -241,18 +254,12 @@ public class FileSystemDocumentDao implements IDocumentDao {
 
   private Properties readProperties(String uuid) throws IOException {
     Properties prop = new Properties();
-    InputStream input = null;
-    try {
-      input = new FileInputStream(new File(getDirectoryPath(uuid), META_DATA_FILE_NAME));
+    try (InputStream input = new FileInputStream(new File(getDirectoryPath(uuid), META_DATA_FILE_NAME))){
       prop.load(input);
-    } finally {
-      if (input != null) {
-        try {
-          input.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
+    }catch(FileNotFoundException e){
+      e.printStackTrace();
+    }catch (IOException e){
+      e.printStackTrace();
     }
     return prop;
   }

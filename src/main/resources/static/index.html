@@ -1,0 +1,51 @@
+<html ng-app="archive">
+<head>
+<meta charset="utf8" />
+<title>Document Archive</title>
+<link rel="stylesheet" href="styles/styles.css">
+<link rel='stylesheet' href='styles/loading-bar.min.css' type='text/css' media='all' />
+</head>
+<body>
+	<div id="wrap">
+		<div id="header">
+			<h1>Document Archive</h1>
+		</div>
+		<div id="main" ng-controller="ArchiveCtrl">
+			<h2>Documents</h2>
+		</table>
+		<table id="table-6">
+			<thead>
+    			<tr>
+    				<th>File Name</th>
+    				<th>content Type</th>
+    			</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="metadata in metadataList">
+					<td><a href="/archive/document/{{metadata.uuid}}"><span ng-bind="metadata.fileName"></span></a></td>
+					<td><span ng-bind="metadata.contentType"></span></td>
+				</tr>
+			</tbody>		
+		</table>
+		</div>
+		<div id="sidebar" ng-controller="UploadCtrl">
+			<h2>Upload</h2>
+			<table class="table">
+				<tr>
+					<td><input type="file" class="custom-file-input" file-model="myFile"></td>
+				</tr>
+				<tr>
+					<td><button ng-click="uploadFile()">Upload</button></td>
+				</tr>
+			</table>
+			<div id="loading-bar-container"></div>
+		</div>
+		<div id="footer">
+			<p>Skylabase</p>
+		</div>
+	</div>
+	<script src="lib/angular/angular-1.2.16.js"></script>
+	<script type='text/javascript' src='lib/angular/loading-bar.min.js'></script>
+	<script src="app.js"></script>
+</body>
+</html>

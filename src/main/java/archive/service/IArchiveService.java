@@ -34,9 +34,9 @@ public interface IArchiveService {
    *
    * @param personName The name of a person, may be null
    * @param date       The date of a document, may be null
-   * @return A list of document meta data
+   * @param contentType contentType
    */
-  List<DocumentMetadata> findDocuments(String personName, Date date);
+  List<DocumentMetadata> findDocuments(String personName, Date date, String contentType);
 
 
   /**
