@@ -134,6 +134,23 @@ public class FileSystemDocumentDao implements IDocumentDao {
   }
 
   /**
+   * Deletes all documents in the archive
+   *
+   * @throws IOException
+   */
+  @Override
+  public void deleteAll() throws IOException {
+    List<DocumentMetadata> docs = findByPersonNameDateContentType(null,null,null);
+    docs.forEach(doc -> {
+      try {
+        delete(doc.getUuid());
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  /**
    * Finds documents in the data store matching the given parameter.
    * A list of document meta data is returned which does not include the file data.
    * Use load and the id from the meta data to get the document file.
@@ -228,9 +245,11 @@ public class FileSystemDocumentDao implements IDocumentDao {
 
   private void saveFileData(Document document) throws IOException {
     String path = getDirectoryPath(document);
+    LOG.debug(path);
     BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(new File(path), document.getFileName())));
     stream.write(document.getFileData());
     stream.close();
+    System.out.println("File data saved");
   }
 
   public void saveMetaData(Document document) throws IOException {
@@ -239,6 +258,7 @@ public class FileSystemDocumentDao implements IDocumentDao {
     File f = new File(new File(path), META_DATA_FILE_NAME);
     OutputStream out = new FileOutputStream(f);
     props.store(out, "Document meta data");
+    System.out.println("Metadat saved");
   }
 
   private List<String> getUuidList() {

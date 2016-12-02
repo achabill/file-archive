@@ -60,5 +60,12 @@ public interface IArchiveService {
    * @return The uuid of the deleted document
    */
   String deleteDocument(String id) throws IOException;
+
+  /**
+   * Deletes all documnets in the archive
+   * @throws IOException
+   */
+  void deleteAllDocuments() throws IOException;
+
 }
 

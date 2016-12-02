@@ -4,6 +4,7 @@ package archive.controller;
 import archive.model.Document;
 import archive.model.DocumentMetadata;
 import archive.service.IArchiveService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +148,12 @@ public class ArchiveController {
   public HttpEntity<String> deleteDocument(@PathVariable String id) throws IOException {
     getArchiveService().deleteDocument(id);
     return new ResponseEntity<String>(id,HttpStatus.ACCEPTED);
+  }
+  @RequestMapping (value = "/", method = RequestMethod.DELETE)
+  @ApiOperation(value = "Delete all documents", notes = "Delets all documents in the file system")
+  public HttpEntity<String> deleteAll() throws IOException{
+    getArchiveService().deleteAllDocuments();
+    return new ResponseEntity<String>("Deleted all", HttpStatus.ACCEPTED);
   }
 
   public IArchiveService getArchiveService() {

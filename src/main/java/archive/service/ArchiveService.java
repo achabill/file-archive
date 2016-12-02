@@ -83,6 +83,16 @@ public class ArchiveService implements IArchiveService, Serializable {
     return getDocumentDao().delete(id);
   }
 
+  /**
+   * Deletes all documnets in the archive
+   *
+   * @throws IOException
+   */
+  @Override
+  public void deleteAllDocuments() throws IOException {
+    getDocumentDao().deleteAll();
+  }
+
 
   public IDocumentDao getDocumentDao() {
     return DocumentDao;

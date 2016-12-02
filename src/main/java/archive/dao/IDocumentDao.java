@@ -64,6 +64,12 @@ public interface IDocumentDao {
   String delete(String uuid) throws IOException;
 
   /**
+   * Deletes all documents in the archive
+   * @throws IOException
+   */
+  void deleteAll() throws IOException;
+
+  /**
    * Finds documents in the data store matching the given parameter.
    * A list of document meta data is returned which does not include the file data.
    * Use load and the id from the meta data to get the document file.
